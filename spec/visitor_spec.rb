@@ -70,7 +70,7 @@ end
 
 describe Visitor do
   before(:each) do
-    @visitor = Visit.new
+    @visitor = Visitor.new
   end
 
   describe 'visit' do

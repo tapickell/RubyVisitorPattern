@@ -32,5 +32,7 @@ class Task
 end
 
 class Visitor
-
+  def visit(subject)
+    "Task: #{subject.name}, Subtask Count: #{subject.subtask_count}"
+  end
 end
