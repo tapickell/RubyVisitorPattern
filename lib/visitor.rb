@@ -7,7 +7,7 @@ class Task
   end
 
   def completed?
-    @completed
+    @completed && subtasks_completed?
   end
 
   def <<(task)
@@ -24,6 +24,10 @@ class Task
 
   def subtasks_completed?
     @subtasks.collect{ |task| task.completed? }.all?
+  end
+
+  def accept_visitor(visitor)
+    visitor.visit self
   end
 end
 

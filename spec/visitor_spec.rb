@@ -41,19 +41,45 @@ describe Task do
       @task << Task.new('Subtask Two')
     end
 
-    it 'returns false if any subtasks are not completed' do
+    it 'returns true if all subtasks are complete and task is complete' do
       @task.subtasks.each { |task| task.complete }
       @task.complete
       @task.completed?.should == true
     end
 
-    it 'returns true if all subtasks are complete and task is complete' do
+    it 'returns false if all subtasks are completed but the task is not set to completed' do
+      @task.subtasks.each { |task| task.complete }
+      @task.completed?.should == false
+    end
+
+    it 'returns false if any subtasks are not completed' do
       @task.complete
       @task.completed?.should == false
+    end
+  end
+
+  describe 'visitor acceptance' do
+    it 'takes a visitor object and calls visit passing self' do
+      @visitor = double('Visitor')
+      @visitor.stub(:visit)
+      @visitor.should_receive(:visit).with(@task)
+      @task.accept_visitor(@visitor)
     end
   end
 end
 
 describe Visitor do
+  before(:each) do
+    @visitor = Visit.new
+  end
+
+  describe 'visit' do
+    it 'returns a string with the subject name and number of subtasks' do
+      @task = double('Task')
+      @task.stub(:name).and_return('Task One')
+      @task.stub(:subtask_count).and_return(2)
+      @visitor.visit(@task).should == "Task: Task One, Subtask Count: 2"
+    end
+  end
 
 end
