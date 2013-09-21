@@ -65,6 +65,11 @@ describe Task do
       @visitor.should_receive(:visit).with(@task)
       @task.accept_visitor(@visitor)
     end
+
+    it 'works' do
+      @task << Task.new('Subtask One')
+      @task.accept_visitor(Visitor.new()).should == 'Task: Task One, Subtask Count: 1'
+    end
   end
 end
 
@@ -77,9 +82,8 @@ describe Visitor do
     it 'returns a string with the subject name and number of subtasks' do
       @task = double('Task')
       @task.stub(:name).and_return('Task One')
-      @task.stub(:subtask_count).and_return(2)
-      @visitor.visit(@task).should == "Task: Task One, Subtask Count: 2"
+      @task.stub(:count_subtasks).and_return(2)
+      @visitor.visit(@task).should == 'Task: Task One, Subtask Count: 2'
     end
   end
-
 end

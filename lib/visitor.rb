@@ -33,6 +33,6 @@ end
 
 class Visitor
   def visit(subject)
-    "Task: #{subject.name}, Subtask Count: #{subject.subtask_count}"
+    "Task: #{subject.name}, Subtask Count: #{subject.count_subtasks}"
   end
 end
