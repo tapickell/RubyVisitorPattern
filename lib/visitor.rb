@@ -13,6 +13,18 @@ class Task
   def <<(task)
     @subtasks << task
   end
+
+  def count_subtasks
+    @subtasks.count
+  end
+
+  def complete
+    @completed = true if subtasks_completed?
+  end
+
+  def subtasks_completed?
+    @subtasks.collect{ |task| task.completed? }.all?
+  end
 end
 
 class Visitor
