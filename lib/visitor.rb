@@ -31,8 +31,14 @@ class Task
   end
 end
 
-class Visitor
+class StringVisitor
   def visit(subject)
     "Task: #{subject.name}, Subtask Count: #{subject.count_subtasks}"
+  end
+end
+
+class HashVisitor
+  def visit(subject)
+    { :name => subject.name, :subtasks => subject.subtasks }
   end
 end

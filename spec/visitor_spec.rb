@@ -66,16 +66,22 @@ describe Task do
       @task.accept_visitor(@visitor)
     end
 
-    it 'works' do
+    it 'works with a StringVisitor' do
       @task << Task.new('Subtask One')
-      @task.accept_visitor(Visitor.new()).should == 'Task: Task One, Subtask Count: 1'
+      @task.accept_visitor(StringVisitor.new()).should == 'Task: Task One, Subtask Count: 1'
+    end
+
+    it 'works with a HashVisitor' do
+      @subtask = Task.new('Subtask One')
+      @task << @subtask
+      @task.accept_visitor(HashVisitor.new()).should == {:name => 'Task One', :subtasks => [@subtask]}
     end
   end
 end
 
-describe Visitor do
+describe StringVisitor do
   before(:each) do
-    @visitor = Visitor.new
+    @visitor = StringVisitor.new
   end
 
   describe 'visit' do
@@ -84,6 +90,23 @@ describe Visitor do
       @task.stub(:name).and_return('Task One')
       @task.stub(:count_subtasks).and_return(2)
       @visitor.visit(@task).should == 'Task: Task One, Subtask Count: 2'
+    end
+  end
+end
+
+describe HashVisitor do
+  before(:each) do
+    @visitor = HashVisitor.new
+  end
+
+  describe 'visit' do
+    it 'returns a hash with the subject name and subtasks' do
+      @task = double('Task')
+      @subtask_one = double('Subtask One')
+      @subtask_two = double('Subtask Two')
+      @task.stub(:name).and_return('Task One')
+      @task.stub(:subtasks).and_return([@subtask_one, @subtask_two])
+      @visitor.visit(@task).should == {:name => 'Task One', :subtasks => [@subtask_one, @subtask_two]}
     end
   end
 end
